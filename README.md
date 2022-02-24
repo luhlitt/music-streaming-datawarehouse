@@ -4,10 +4,10 @@ analysing the songs their users are listening to.
 
 The objective of this project is to build a pipeline thats extracts user activity and song data on the app, which is stored in S3, transform it and load it into Redshift for the analytics team to use to find insights in what songs their users are listening to. 
 
-![alt text](https://github.com/adelolaadebo/music-streaming_datawarehouse/blob/main/er_diagram.jpg?raw=true)
+![Datawarehouse Entity Relationship Diagram](https://github.com/luhlitt/music-streaming_datawarehouse/main/er_diagram.jpg?raw=true)
 
 The steps followed to achieve the above stated objectives are:
-1. Extract user activity and song data from S3 in a JSON logs directory.
+1. Extract user activity and song data from S3 inß a JSON logs directory.
 2. Stage the data in Redshift.
 3. Transform the data and load it into star schema with fact and dimension tables.
 
