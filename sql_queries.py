@@ -168,13 +168,14 @@ user_table_insert = (""" INSERT INTO users (
     level
     )
     SELECT
-        userId as user_id,
+        DISTINCT userId as user_id,
         firstName as first_name,
         lastName as last_name,
         gender,
         level
-    FROM staging_events
+    FROM staging_events 
     WHERE userId IS NOT NULL
+    AND page = 'NextSong'
     ;
 """)
 
@@ -186,7 +187,7 @@ song_table_insert = (""" INSERT INTO song (
     duration
     )
     SELECT 
-        song_id,
+        DISTINCT song_id,
         title,
         artist_id,
         year,
@@ -204,17 +205,13 @@ artist_table_insert = (""" INSERT INTO artist (
     longitude
     )
     SELECT
-        ss.artist_id,
-        ss.artist_name as name,
-        se.location,
-        ss.artist_latitude as latitude,
-        ss.artist_longitude as longitude
-    FROM staging_events se
-    LEFT JOIN staging_songs ss
-        ON se.song = ss.title
-        AND se.artist = ss.artist_name
-        AND se.length = ss.duration
-    WHERE ss.artist_id IS NOT NULL    
+        DISTINCT artist_id,
+        artist_name as name,
+        artist_location as location,
+        artist_latitude as latitude,
+        artist_longitude as longitude
+    FROM staging_songs 
+    WHERE artist_id IS NOT NULL    
         ;
 """)
 
@@ -228,14 +225,14 @@ time_table_insert = (""" INSERT INTO time (
     weekday
     )
     SELECT 
-        (TIMESTAMP 'epoch' + se.ts/1000*INTERVAL '1 second') as start_time,
+        DISTINCT start_time,
         extract(hour from start_time) as hour,
         extract(day from start_time) as day,
         extract(week from start_time) as week,
         extract(month from start_time) as month,
         extract(year from start_time) as year,
         extract(weekday from start_time) as dow
-    FROM staging_events se
+    FROM songplay
         ;   
 """)
 
